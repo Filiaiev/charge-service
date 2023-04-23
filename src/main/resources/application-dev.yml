@@ -1,0 +1,15 @@
+jwt:
+    secret: "secret"
+spring:
+    jpa:
+        show-sql: true
+        properties:
+            hibernate:
+                format_sql: true
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: "jdbc:mysql://localhost:3306/rates"
+        username: "root"
+        password: "SuSundron007@"
+server:
+    port: 8084
