@@ -1,11 +1,9 @@
 package com.filiaiev.chargeservice.service;
 
 import com.filiaiev.chargeservice.model.*;
-import com.filiaiev.chargeservice.repository.ServiceChargeRateRepository;
-import com.filiaiev.chargeservice.repository.SurchargeRateRepository;
-import com.filiaiev.chargeservice.repository.WeightRateRepository;
-import com.filiaiev.chargeservice.service.mapper.RateMapper;
-import jakarta.transaction.Transactional;
+import com.filiaiev.chargeservice.service.rate.ServiceRateService;
+import com.filiaiev.chargeservice.service.rate.SurchargeRateService;
+import com.filiaiev.chargeservice.service.rate.WeightRateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,25 +18,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PricingService {
 
-    private final WeightRateRepository weightRateRepository;
-    private final ServiceChargeRateRepository serviceChargeRateRepository;
-    private final SurchargeRateRepository surchargeRateRepository;
+    private final WeightRateService weightRateService;
+    private final ServiceRateService serviceRateService;
+    private final SurchargeRateService surchargeRateService;
 
-    private final RateMapper rateMapper;
-
-    @Transactional
     public DetailedChargeSummary createChargeSummary(CreateChargeSummaryRequest request) {
-        List<WeightRate> weightRates = rateMapper.mapWeightRateDOsToWeightRates(
-                weightRateRepository.findLatestEffectiveRatesByZoneRouteId(request.getZoneRouteId())
-        );
+        List<WeightRate> weightRates = weightRateService.getLatestWeightRates(request.getZoneRouteId());
 
-        Map<SurchargeType, SurchargeRate> surchargeRates = rateMapper.mapSurchargeRateDOsToSurchargeRates(
-                surchargeRateRepository.findLatestEffectiveSurchargesRateByZoneRouteId(request.getZoneRouteId())
-        );
+        Map<SurchargeType, SurchargeRate> surchargeRates =
+                surchargeRateService.getLatestSurchargeRates(request.getZoneRouteId());
 
-        ServiceChargeRate serviceChargeRate = rateMapper.mapServiceChargeRateDOToServiceChargeRate(
-                serviceChargeRateRepository.findLatestEffectiveServiceCharge()
-        );
+        ServiceChargeRate serviceChargeRate = serviceRateService.getLatestRates();
 
         List<DetailedChargeSummaryItem> chargesSummary = new ArrayList<>();
 

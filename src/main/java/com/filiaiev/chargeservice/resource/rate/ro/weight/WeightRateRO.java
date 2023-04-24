@@ -1,7 +1,5 @@
-package com.filiaiev.chargeservice.resource.rate.ro;
+package com.filiaiev.chargeservice.resource.rate.ro.weight;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Null;
 import lombok.Data;
 import lombok.NonNull;
@@ -25,6 +23,6 @@ public class WeightRateRO {
     private BigDecimal ratePerKg;
 
     // maybe validate to not allow previous dates
-    @NonNull
+    @Null
     private Instant effectiveDate;
 }

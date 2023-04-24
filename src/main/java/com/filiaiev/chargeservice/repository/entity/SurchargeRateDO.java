@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Entity(name = "surcharge_rates")
 @Data
-public class SurchargeRateDO {
+public class SurchargeRateDO implements Rate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,10 +1,11 @@
-package com.filiaiev.chargeservice.resource.rate.ro;
+package com.filiaiev.chargeservice.resource.rate.ro.weight;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NonNull;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
@@ -15,4 +16,7 @@ public class CreateWeightRatesRequestRO {
 
     @Valid
     private List<WeightRateRO> rates;
+
+    @NonNull
+    private Instant effectiveDate;
 }

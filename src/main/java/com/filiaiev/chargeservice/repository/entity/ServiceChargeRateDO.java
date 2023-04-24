@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @Entity(name = "service_charge_rates")
 @Data
-public class ServiceChargeRateDO {
+public class ServiceChargeRateDO implements Rate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

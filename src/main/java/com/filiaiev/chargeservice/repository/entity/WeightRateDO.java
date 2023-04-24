@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @Entity(name = "weight_rates")
 @Data
-public class WeightRateDO {
+public class WeightRateDO implements Rate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

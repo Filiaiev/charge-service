@@ -1,7 +1,5 @@
 package com.filiaiev.chargeservice.model;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -11,6 +9,7 @@ import java.time.Instant;
 public class SurchargeRate {
 
     private Integer id;
+    private Integer zoneRouteId;
     private SurchargeType type;
     private BigDecimal ratePerKg;
     private Instant effectiveDate;

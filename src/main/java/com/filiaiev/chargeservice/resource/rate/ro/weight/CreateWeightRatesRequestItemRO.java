@@ -1,4 +1,4 @@
-package com.filiaiev.chargeservice.resource.rate.ro;
+package com.filiaiev.chargeservice.resource.rate.ro.weight;
 
 import lombok.Data;
 
