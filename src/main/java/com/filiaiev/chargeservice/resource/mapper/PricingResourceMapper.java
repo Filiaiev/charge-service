@@ -8,6 +8,10 @@ import com.filiaiev.chargeservice.resource.pricing.ro.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Mapper(componentModel = "spring")
 public interface PricingResourceMapper {
 
@@ -30,6 +34,17 @@ public interface PricingResourceMapper {
         return ro;
     }
 
-    ShortChargeSummaryRO mapDetailedChargeSummaryToShortChargeSummaryRO(DetailedChargeSummary detailedChargeSummary);
+    default ShortChargeSummaryRO mapDetailedChargeSummaryToShortChargeSummaryRO(DetailedChargeSummary detailedChargeSummary) {
+        ShortChargeSummaryRO shortChargeSummaryRO = new ShortChargeSummaryRO();
+
+        List<BigDecimal> itemsChargeList = detailedChargeSummary.getItems().stream()
+                .map(DetailedChargeSummaryItem::getTotal)
+                .collect(Collectors.toList());
+
+        shortChargeSummaryRO.setTotal(detailedChargeSummary.getTotal());
+        shortChargeSummaryRO.setItemsPriceList(itemsChargeList);
+
+        return shortChargeSummaryRO;
+    };
 
 }

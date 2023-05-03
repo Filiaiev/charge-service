@@ -3,12 +3,11 @@ package com.filiaiev.chargeservice.resource.pricing.ro;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ShortChargeSummaryRO {
 
-    private BigDecimal weightTotal;
-    private BigDecimal serviceTotal;
-    private BigDecimal surchargeTotal;
+    private List<BigDecimal> itemsPriceList;
     private BigDecimal total;
 }

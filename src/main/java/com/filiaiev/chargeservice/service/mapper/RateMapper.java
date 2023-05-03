@@ -9,8 +9,10 @@ import com.filiaiev.chargeservice.repository.entity.SurchargeRateDO;
 import com.filiaiev.chargeservice.repository.entity.WeightRateDO;
 import org.mapstruct.Mapper;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -26,7 +28,10 @@ public interface RateMapper {
     default Map<SurchargeType, SurchargeRate> mapSurchargeRateDOsToSurchargeRates(List<SurchargeRateDO> surchargeRateDO) {
         return surchargeRateDO.stream()
                 .map(this::mapSurchargeRateDOToSurchargeRate)
-                .collect(Collectors.toMap(SurchargeRate::getType, Function.identity()));
+                .collect(Collectors.toMap(SurchargeRate::getType, Function.identity(),
+                        // Add db constrain to restrict type duplicates for same date
+                        BinaryOperator.maxBy(Comparator.comparing(SurchargeRate::getRatePerKg)))
+                );
     };
 
     ServiceChargeRate mapServiceChargeRateDOToServiceChargeRate(ServiceChargeRateDO serviceChargeRateDO);
