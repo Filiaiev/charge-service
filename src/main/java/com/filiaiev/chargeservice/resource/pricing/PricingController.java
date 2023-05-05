@@ -20,15 +20,6 @@ public class PricingController {
     private final PricingService pricingService;
     private final PricingResourceMapper pricingResourceMapper;
 
-    @PostMapping(produces = "application/summary-detailed+json")
-    public DetailedChargeSummaryRO getDetailedChargeSummary(@RequestBody CalculateShippingPriceRequestRO requestRO) {
-        CreateChargeSummaryRequest request = pricingResourceMapper.mapRoToModel(requestRO);
-
-        return pricingResourceMapper.mapDetailedChargeSummaryToDetailedChargeSummaryRO(
-                pricingService.createChargeSummary(request)
-        );
-    }
-
     @PostMapping(produces = "application/summary-short+json")
     public ShortChargeSummaryRO getShortChargeSummary(@RequestBody CalculateShippingPriceRequestRO requestRO) {
         CreateChargeSummaryRequest request = pricingResourceMapper.mapRoToModel(requestRO);
@@ -38,4 +29,12 @@ public class PricingController {
         );
     }
 
+    @PostMapping(produces = "application/summary-detailed+json")
+    public DetailedChargeSummaryRO getDetailedChargeSummary(@RequestBody CalculateShippingPriceRequestRO requestRO) {
+        CreateChargeSummaryRequest request = pricingResourceMapper.mapRoToModel(requestRO);
+
+        return pricingResourceMapper.mapDetailedChargeSummaryToDetailedChargeSummaryRO(
+                pricingService.createChargeSummary(request)
+        );
+    }
 }
