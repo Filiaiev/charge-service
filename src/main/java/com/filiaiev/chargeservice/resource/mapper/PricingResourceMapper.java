@@ -1,10 +1,8 @@
 package com.filiaiev.chargeservice.resource.mapper;
 
-import com.filiaiev.chargeservice.model.CreateChargeSummaryRequest;
-import com.filiaiev.chargeservice.model.CreateChargeSummaryRequestItem;
-import com.filiaiev.chargeservice.model.DetailedChargeSummary;
-import com.filiaiev.chargeservice.model.DetailedChargeSummaryItem;
+import com.filiaiev.chargeservice.model.*;
 import com.filiaiev.chargeservice.resource.pricing.ro.*;
+import com.filiaiev.chargeservice.service.util.ChargeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,6 +14,23 @@ import java.util.stream.Collectors;
 public interface PricingResourceMapper {
 
     CreateChargeSummaryRequest mapRoToModel(CalculateShippingPriceRequestRO objectRO);
+
+    default CreateChargeSummaryRequestItem mapRequestItemROToRequestItem(CalculateShippingPriceRequestItemRO requestRO) {
+        CreateChargeSummaryRequestItem item = new CreateChargeSummaryRequestItem();
+
+        item.setQuantity(requestRO.getQuantity());
+        item.setDeclaredWeight(requestRO.getDeclaredWeight());
+
+        Dimension dimension = dimensionRoToDimension(requestRO.getDimension());
+
+        item.setDimension(dimension);
+        item.setShippingWeight(ChargeUtils.getShippingWeight(dimension, requestRO.getDeclaredWeight()));
+        item.setDeclaredCargoPrice(requestRO.getDeclaredCargoPrice());
+
+        return item;
+    }
+
+    Dimension dimensionRoToDimension(DimensionRO dimensionRO);
 
     @Mapping(target = "chargesBreakdown", source = "items")
     DetailedChargeSummaryRO mapDetailedChargeSummaryToDetailedChargeSummaryRO(DetailedChargeSummary summary);

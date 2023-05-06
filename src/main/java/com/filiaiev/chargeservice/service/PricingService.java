@@ -1,10 +1,14 @@
 package com.filiaiev.chargeservice.service;
 
 import com.filiaiev.chargeservice.model.*;
+import com.filiaiev.chargeservice.service.pricing.ServiceChargeStrategy;
+import com.filiaiev.chargeservice.service.pricing.SurchargeStrategy;
+import com.filiaiev.chargeservice.service.pricing.WeightChargeStrategy;
 import com.filiaiev.chargeservice.service.rate.ServiceRateService;
 import com.filiaiev.chargeservice.service.rate.SurchargeRateService;
 import com.filiaiev.chargeservice.service.rate.WeightRateService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -16,11 +20,26 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PricingService {
 
     private final WeightRateService weightRateService;
     private final ServiceRateService serviceRateService;
     private final SurchargeRateService surchargeRateService;
+    private final WeightChargeStrategy weightChargeStrategy;
+    private final ServiceChargeStrategy serviceChargeStrategy;
+    private final SurchargeStrategy surchargeStrategy;
+
+    public BigDecimal createChargeSummary2(CreateChargeSummaryRequest request) {
+        BigDecimal charge = weightChargeStrategy.createCharge(request);
+        BigDecimal charge1 = serviceChargeStrategy.createCharge(request);
+        BigDecimal charge2 = surchargeStrategy.createCharge(request);
+
+        log.info("Weight Charge: " + charge);
+        log.info("Service Charge: " + charge1);
+        log.info("Surcharge: " + charge2);
+        return charge.add(charge1).add(charge2);
+    }
 
     public DetailedChargeSummary createChargeSummary(CreateChargeSummaryRequest request) {
         List<WeightRate> weightRates = weightRateService.getLatestWeightRates(request.getZoneRouteId());
@@ -33,11 +52,11 @@ public class PricingService {
         List<DetailedChargeSummaryItem> chargesSummary = new ArrayList<>();
 
         for (CreateChargeSummaryRequestItem ci : request.getItems()) {
-            double volumetricWeight = ci.getHeight() * ci.getWidth() * ci.getLength() * 167;
-            double shipmentWeight = Math.max(volumetricWeight, ci.getActualWeight());
+//            double volumetricWeight = ci.getHeight() * ci.getWidth() * ci.getLength() * 167;
+            double shipmentWeight = Math.max(ci.getShippingWeight(), ci.getDeclaredWeight());
 
             WeightRate shipmentWeightRate = getShipmentWeightRate(weightRates, shipmentWeight);
-            ci.setFinalShippingWeight(Double.max(shipmentWeight, shipmentWeightRate.getWeightLimitKg()));
+//            ci.setFinalShippingWeight(Double.max(shipmentWeight, shipmentWeightRate.getWeightLimitKg()));
 
             // If I use decorator, I MAY, not 100%, move logic to decorator
             BigDecimal weightBasedCharge = ci.getWeightCharge(shipmentWeightRate);

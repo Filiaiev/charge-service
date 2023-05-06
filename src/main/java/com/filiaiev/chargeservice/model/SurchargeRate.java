@@ -12,5 +12,6 @@ public class SurchargeRate {
     private Integer zoneRouteId;
     private SurchargeType type;
     private BigDecimal ratePerKg;
+    private BigDecimal minCharge;
     private Instant effectiveDate;
 }

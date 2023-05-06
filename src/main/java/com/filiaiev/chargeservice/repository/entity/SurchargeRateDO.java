@@ -17,5 +17,6 @@ public class SurchargeRateDO implements Rate {
     @Enumerated(value = EnumType.STRING)
     private SurchargeTypeDO type;
     private BigDecimal ratePerKg;
+    private BigDecimal minCharge;
     private Instant effectiveDate;
 }

@@ -4,13 +4,14 @@ import com.filiaiev.chargeservice.model.CreateChargeSummaryRequest;
 import com.filiaiev.chargeservice.resource.mapper.PricingResourceMapper;
 import com.filiaiev.chargeservice.resource.pricing.ro.CalculateShippingPriceRequestRO;
 import com.filiaiev.chargeservice.resource.pricing.ro.DetailedChargeSummaryRO;
-import com.filiaiev.chargeservice.resource.pricing.ro.ShortChargeSummaryRO;
 import com.filiaiev.chargeservice.service.PricingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/pricing")
@@ -21,12 +22,13 @@ public class PricingController {
     private final PricingResourceMapper pricingResourceMapper;
 
     @PostMapping(produces = "application/summary-short+json")
-    public ShortChargeSummaryRO getShortChargeSummary(@RequestBody CalculateShippingPriceRequestRO requestRO) {
+    public BigDecimal getShortChargeSummary(@RequestBody CalculateShippingPriceRequestRO requestRO) {
         CreateChargeSummaryRequest request = pricingResourceMapper.mapRoToModel(requestRO);
 
-        return pricingResourceMapper.mapDetailedChargeSummaryToShortChargeSummaryRO(
-                pricingService.createChargeSummary(request)
-        );
+//        return pricingResourceMapper.mapDetailedChargeSummaryToShortChargeSummaryRO(
+//                pricingService.createChargeSummary(request)
+//        );
+        return pricingService.createChargeSummary2(request);
     }
 
     @PostMapping(produces = "application/summary-detailed+json")
@@ -36,5 +38,6 @@ public class PricingController {
         return pricingResourceMapper.mapDetailedChargeSummaryToDetailedChargeSummaryRO(
                 pricingService.createChargeSummary(request)
         );
+//        return null;
     }
 }

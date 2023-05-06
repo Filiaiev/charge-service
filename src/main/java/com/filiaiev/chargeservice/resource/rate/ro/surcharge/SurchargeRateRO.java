@@ -19,6 +19,8 @@ public class SurchargeRateRO {
     @NotNull
     private BigDecimal ratePerKg;
 
+    private BigDecimal minCharge;
+
     @Null
     private Instant effectiveDate;
 }

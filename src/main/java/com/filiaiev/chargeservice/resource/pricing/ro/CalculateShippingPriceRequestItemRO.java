@@ -1,6 +1,5 @@
 package com.filiaiev.chargeservice.resource.pricing.ro;
 
-import jakarta.validation.constraints.Null;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -9,11 +8,7 @@ import java.math.BigDecimal;
 public class CalculateShippingPriceRequestItemRO {
 
     private BigDecimal quantity;
-    private Double actualWeight;
-    @Null
-    private Double finalShippingWeight;
-    private Double height;
-    private Double width;
-    private Double length;
+    private Double declaredWeight;
+    private DimensionRO dimension;
     private BigDecimal declaredCargoPrice;
 }
