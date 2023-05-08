@@ -1,10 +1,10 @@
 package com.filiaiev.chargeservice.service.rate;
 
-import com.filiaiev.chargeservice.model.WeightRate;
+import com.filiaiev.chargeservice.model.rate.WeightRate;
 import com.filiaiev.chargeservice.repository.WeightRateRepository;
 import com.filiaiev.chargeservice.repository.entity.WeightRateDO;
 import com.filiaiev.chargeservice.repository.specification.WeightRateSpecification;
-import com.filiaiev.chargeservice.service.mapper.RateMapper;
+import com.filiaiev.chargeservice.service.mapper.RateServiceMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ public class WeightRateService {
 
     private final WeightRateRepository repository;
     private final WeightRateSpecification specification;
-    private final RateMapper mapper;
+    private final RateServiceMapper mapper;
 
     public List<WeightRate> getLatestWeightRates(Integer zoneRouteId) {
         return mapper.mapWeightRateDOsToWeightRates(

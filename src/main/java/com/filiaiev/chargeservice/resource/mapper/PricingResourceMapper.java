@@ -1,23 +1,31 @@
 package com.filiaiev.chargeservice.resource.mapper;
 
-import com.filiaiev.chargeservice.model.*;
-import com.filiaiev.chargeservice.resource.pricing.ro.*;
+import com.filiaiev.chargeservice.model.Dimension;
+import com.filiaiev.chargeservice.model.charge.ChargeSummary;
+import com.filiaiev.chargeservice.model.charge.ChargeSummaryItem;
+import com.filiaiev.chargeservice.model.charge.CreateChargeSummaryRequest;
+import com.filiaiev.chargeservice.model.charge.CreateChargeSummaryRequestItem;
+import com.filiaiev.chargeservice.resource.entity.DimensionRO;
+import com.filiaiev.chargeservice.resource.entity.charge.ChargeSummaryItemRO;
+import com.filiaiev.chargeservice.resource.entity.charge.ChargeSummaryRO;
+import com.filiaiev.chargeservice.resource.entity.charge.CreateChargeSummaryRequestItemRO;
+import com.filiaiev.chargeservice.resource.entity.charge.CreateChargeSummaryRequestRO;
 import com.filiaiev.chargeservice.service.util.ChargeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface PricingResourceMapper {
 
-    CreateChargeSummaryRequest mapRoToModel(CalculateShippingPriceRequestRO objectRO);
+    CreateChargeSummaryRequest mapRoToModel(CreateChargeSummaryRequestRO objectRO);
 
-    default CreateChargeSummaryRequestItem mapRequestItemROToRequestItem(CalculateShippingPriceRequestItemRO requestRO) {
+    default CreateChargeSummaryRequestItem mapRequestItemROToRequestItem(CreateChargeSummaryRequestItemRO requestRO, int position) {
         CreateChargeSummaryRequestItem item = new CreateChargeSummaryRequestItem();
 
+        item.setPosition(position);
         item.setQuantity(requestRO.getQuantity());
         item.setDeclaredWeight(requestRO.getDeclaredWeight());
 
@@ -30,36 +38,24 @@ public interface PricingResourceMapper {
         return item;
     }
 
-    Dimension dimensionRoToDimension(DimensionRO dimensionRO);
+    default List<CreateChargeSummaryRequestItem> mapCalculateShippingPriceRequestItemROListToCreateChargeSummaryRequestItems(List<CreateChargeSummaryRequestItemRO> requestItems) {
+        if (requestItems == null) {
+            return null;
+        }
 
-    @Mapping(target = "chargesBreakdown", source = "items")
-    DetailedChargeSummaryRO mapDetailedChargeSummaryToDetailedChargeSummaryRO(DetailedChargeSummary summary);
+        List<CreateChargeSummaryRequestItem> resultList = new ArrayList<>();
+        for (int i = 1; i < requestItems.size()+1; i++) {
+            resultList.add(mapRequestItemROToRequestItem(requestItems.get(i-1), i));
+        }
 
-    CalculateShippingPriceRequestItemRO mapCalculateShippingPriceRequestItemToRo(CreateChargeSummaryRequestItem requestItem);
-
-    default DetailedChargeSummaryItemRO mapDetailedChargeSummaryItemToRo(DetailedChargeSummaryItem item) {
-        DetailedChargeSummaryItemRO ro = new DetailedChargeSummaryItemRO();
-
-        ro.setCargoItem(mapCalculateShippingPriceRequestItemToRo(item.getCargoItem()));
-        ro.setWeightTotal(item.getWeightFinalCharge());
-        ro.setServiceTotal(item.getServiceTotal());
-        ro.setSurchargeTotal(item.getSurchargeTotal());
-        ro.setTotal(item.getTotal());
-
-        return ro;
+        return resultList;
     }
 
-    default ShortChargeSummaryRO mapDetailedChargeSummaryToShortChargeSummaryRO(DetailedChargeSummary detailedChargeSummary) {
-        ShortChargeSummaryRO shortChargeSummaryRO = new ShortChargeSummaryRO();
+    Dimension dimensionRoToDimension(DimensionRO dimensionRO);
 
-        List<BigDecimal> itemsChargeList = detailedChargeSummary.getItems().stream()
-                .map(DetailedChargeSummaryItem::getTotal)
-                .collect(Collectors.toList());
+    ChargeSummaryRO mapChargeSummaryToChargeSummaryRO(ChargeSummary chargeSummary);
 
-        shortChargeSummaryRO.setTotal(detailedChargeSummary.getTotal());
-        shortChargeSummaryRO.setItemsPriceList(itemsChargeList);
-
-        return shortChargeSummaryRO;
-    };
+    @Mapping(target = "itemBreakdown", source = "chargesBreakdown")
+    ChargeSummaryItemRO mapChargeSummaryItemToChargeSummaryItemRO(ChargeSummaryItem chargeSummaryItem);
 
 }

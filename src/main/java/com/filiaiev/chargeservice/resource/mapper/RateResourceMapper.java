@@ -1,15 +1,15 @@
 package com.filiaiev.chargeservice.resource.mapper;
 
-import com.filiaiev.chargeservice.model.ServiceChargeRate;
-import com.filiaiev.chargeservice.model.SurchargeRate;
-import com.filiaiev.chargeservice.model.SurchargeType;
-import com.filiaiev.chargeservice.model.WeightRate;
-import com.filiaiev.chargeservice.resource.rate.ro.service.CreateServiceRatesRequestRO;
-import com.filiaiev.chargeservice.resource.rate.ro.service.ServiceChargeRateRO;
-import com.filiaiev.chargeservice.resource.rate.ro.surcharge.CreateSurchargeRatesRequestRO;
-import com.filiaiev.chargeservice.resource.rate.ro.surcharge.SurchargeRateRO;
-import com.filiaiev.chargeservice.resource.rate.ro.weight.CreateWeightRatesRequestRO;
-import com.filiaiev.chargeservice.resource.rate.ro.weight.WeightRateRO;
+import com.filiaiev.chargeservice.model.rate.ServiceChargeRate;
+import com.filiaiev.chargeservice.model.rate.SurchargeRate;
+import com.filiaiev.chargeservice.model.rate.SurchargeType;
+import com.filiaiev.chargeservice.model.rate.WeightRate;
+import com.filiaiev.chargeservice.resource.entity.rate.service.CreateServiceRatesRequestRO;
+import com.filiaiev.chargeservice.resource.entity.rate.service.ServiceChargeRateRO;
+import com.filiaiev.chargeservice.resource.entity.rate.surcharge.CreateSurchargeRatesRequestRO;
+import com.filiaiev.chargeservice.resource.entity.rate.surcharge.SurchargeRateRO;
+import com.filiaiev.chargeservice.resource.entity.rate.weight.CreateWeightRatesRequestRO;
+import com.filiaiev.chargeservice.resource.entity.rate.weight.WeightRateRO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

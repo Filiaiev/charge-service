@@ -1,10 +1,10 @@
 package com.filiaiev.chargeservice.service.rate;
 
-import com.filiaiev.chargeservice.model.ServiceChargeRate;
+import com.filiaiev.chargeservice.model.rate.ServiceChargeRate;
 import com.filiaiev.chargeservice.repository.ServiceChargeRateRepository;
 import com.filiaiev.chargeservice.repository.entity.ServiceChargeRateDO;
 import com.filiaiev.chargeservice.repository.specification.ServiceRateSpecification;
-import com.filiaiev.chargeservice.service.mapper.RateMapper;
+import com.filiaiev.chargeservice.service.mapper.RateServiceMapper;
 import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class ServiceRateService {
 
     private final ServiceChargeRateRepository repository;
     private final ServiceRateSpecification specification;
-    private final RateMapper mapper;
+    private final RateServiceMapper mapper;
 
     public ServiceChargeRate getLatestRates() {
         return mapper.mapServiceChargeRateDOToServiceChargeRate(
