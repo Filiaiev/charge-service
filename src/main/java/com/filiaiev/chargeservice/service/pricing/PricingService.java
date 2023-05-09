@@ -32,11 +32,11 @@ public class PricingService {
 
     private ChargeSummary buildChargeSummary(Map<Integer, ChargeSummaryItem> chargeSummaryByPosition) {
         List<ChargeSummaryItem> itemsChargeBreakdown = getItemsChargeBreakdown(chargeSummaryByPosition);
-        List<ItemCharge> totalChargeBreakdown = getTotalChargeBreakdown(itemsChargeBreakdown);
+        Map<ChargeType, BigDecimal> totalChargeBreakdown = getTotalChargeBreakdownByType(itemsChargeBreakdown);
 
         return ChargeSummary.builder()
                 .itemsBreakdown(itemsChargeBreakdown)
-                .totalBreakdown(totalChargeBreakdown)
+                .totalBreakdownByType(totalChargeBreakdown)
                 .build();
     }
 
@@ -47,8 +47,8 @@ public class PricingService {
                 .collect(Collectors.toList());
     }
 
-    private List<ItemCharge> getTotalChargeBreakdown(List<ChargeSummaryItem> summaryItems) {
-        Map<ChargeType, BigDecimal> totalBreakdownByChargeType = summaryItems.stream()
+    private Map<ChargeType, BigDecimal> getTotalChargeBreakdownByType(List<ChargeSummaryItem> summaryItems) {
+        return summaryItems.stream()
                 .map(ChargeSummaryItem::getItemBreakdown)
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(ItemCharge::getType,
@@ -56,9 +56,5 @@ public class PricingService {
                                 Collectors.reducing(BigDecimal.ZERO, BigDecimal::add)
                         )
                 ));
-
-        return totalBreakdownByChargeType.entrySet().stream()
-                .map((entry) -> new ItemCharge(entry.getKey(), entry.getValue()))
-                .collect(Collectors.toList());
     }
 }

@@ -5,17 +5,17 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 public class ChargeSummary {
 
     private List<ChargeSummaryItem> itemsBreakdown;
-    private List<ItemCharge> totalBreakdown;
+    private Map<ChargeType, BigDecimal> totalBreakdownByType;
 
     public BigDecimal getTotal() {
-        return totalBreakdown.stream()
-                .map(ItemCharge::getCharge)
+        return totalBreakdownByType.values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

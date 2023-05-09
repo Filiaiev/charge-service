@@ -1,9 +1,9 @@
 package com.filiaiev.chargeservice.resource.entity.charge;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Getter
+@RequiredArgsConstructor
 public enum ChargeTypeRO {
 
     WEIGHT("Weight charge"),
@@ -12,9 +12,5 @@ public enum ChargeTypeRO {
     SURCHARGE_SECURITY("Surcharge - security");
 
     @JsonValue
-    private final String id;
-
-    ChargeTypeRO(String id) {
-        this.id = id;
-    }
+    public final String id;
 }

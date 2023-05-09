@@ -1,21 +1,16 @@
 package com.filiaiev.chargeservice.resource.mapper;
 
 import com.filiaiev.chargeservice.model.Dimension;
-import com.filiaiev.chargeservice.model.charge.ChargeSummary;
-import com.filiaiev.chargeservice.model.charge.ChargeSummaryItem;
-import com.filiaiev.chargeservice.model.charge.CreateChargeSummaryRequest;
-import com.filiaiev.chargeservice.model.charge.CreateChargeSummaryRequestItem;
+import com.filiaiev.chargeservice.model.charge.*;
 import com.filiaiev.chargeservice.resource.entity.DimensionRO;
-import com.filiaiev.chargeservice.resource.entity.charge.ChargeSummaryItemRO;
-import com.filiaiev.chargeservice.resource.entity.charge.ChargeSummaryRO;
-import com.filiaiev.chargeservice.resource.entity.charge.CreateChargeSummaryRequestItemRO;
-import com.filiaiev.chargeservice.resource.entity.charge.CreateChargeSummaryRequestRO;
+import com.filiaiev.chargeservice.resource.entity.charge.*;
 import com.filiaiev.chargeservice.service.util.ChargeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface PricingResourceMapper {
@@ -53,9 +48,27 @@ public interface PricingResourceMapper {
 
     Dimension dimensionRoToDimension(DimensionRO dimensionRO);
 
-    ChargeSummaryRO mapChargeSummaryToChargeSummaryRO(ChargeSummary chargeSummary);
+    default ChargeSummaryRO mapChargeSummaryToChargeSummaryRO(ChargeSummary chargeSummary) {
+        ChargeSummaryRO chargeSummaryRO = new ChargeSummaryRO();
 
-    @Mapping(target = "itemBreakdown", source = "chargesBreakdown")
+        chargeSummaryRO.setItemsBreakdown(mapChargeSummaryItemsToChargeSummaryItemROs(chargeSummary.getItemsBreakdown()));
+        chargeSummaryRO.setTotal(chargeSummary.getTotal());
+
+        List<ItemChargeRO> itemsBreakdown = chargeSummary.getTotalBreakdownByType().entrySet().stream()
+                .map((entry) -> mapItemChargeToItemChargeRO(
+                        new ItemCharge(entry.getKey(), entry.getValue()))
+                )
+                .collect(Collectors.toList());
+
+        chargeSummaryRO.setTotalBreakdown(itemsBreakdown);
+
+        return chargeSummaryRO;
+    };
+
+    @Mapping(target = "itemBreakdown", source = "itemBreakdown")
     ChargeSummaryItemRO mapChargeSummaryItemToChargeSummaryItemRO(ChargeSummaryItem chargeSummaryItem);
 
+    List<ChargeSummaryItemRO> mapChargeSummaryItemsToChargeSummaryItemROs(List<ChargeSummaryItem> items);
+
+    ItemChargeRO mapItemChargeToItemChargeRO(ItemCharge itemCharge);
 }
