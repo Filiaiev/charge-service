@@ -20,7 +20,7 @@ public class ServiceChargeStrategy implements ChargeStrategy {
     private final ServiceRateService rateService;
 
     @Override
-    public List<ItemCharge> createCharge(CreateChargeSummaryRequest request) {
+    public List<ItemCharge> createChargeSummary(CreateChargeSummaryRequest request) {
         ServiceChargeRate rates = rateService.getLatestRates();
 
         List<ItemCharge> chargeList = new ArrayList<>();

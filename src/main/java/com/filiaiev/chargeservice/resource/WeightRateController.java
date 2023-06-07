@@ -37,6 +37,7 @@ public class WeightRateController {
         );
     }
 
+    // Permit for admin only
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void createRates(@Valid @RequestBody CreateWeightRatesRequestRO requestRO) {

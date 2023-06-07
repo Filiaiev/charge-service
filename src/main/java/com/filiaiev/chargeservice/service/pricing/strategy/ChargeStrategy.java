@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ChargeStrategy {
 
-    List<ItemCharge> createCharge(CreateChargeSummaryRequest request);
+    List<ItemCharge> createChargeSummary(CreateChargeSummaryRequest request);
 }

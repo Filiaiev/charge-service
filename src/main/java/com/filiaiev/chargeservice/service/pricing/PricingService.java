@@ -21,7 +21,7 @@ public class PricingService {
 
     public ChargeSummary createChargeSummary(CreateChargeSummaryRequest request) {
         Map<Integer, ChargeSummaryItem> itemChargeSummaryByPosition = chargeStrategies.stream()
-                .map(strategy -> strategy.createCharge(request))
+                .map(strategy -> strategy.createChargeSummary(request))
                 .flatMap(Collection::stream)
                 .collect(Collectors.groupingBy(ItemCharge::getPosition,
                         Collectors.collectingAndThen(Collectors.toList(), ChargeSummaryItem::new))

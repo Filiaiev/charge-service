@@ -22,7 +22,7 @@ public class WeightChargeStrategy implements ChargeStrategy {
     private final WeightRateService rateService;
 
     @Override
-    public List<ItemCharge> createCharge(CreateChargeSummaryRequest request) {
+    public List<ItemCharge> createChargeSummary(CreateChargeSummaryRequest request) {
         List<WeightRate> weightRates = rateService.getLatestWeightRates(request.getZoneRouteId());
 
         List<ItemCharge> chargeList = new ArrayList<>();

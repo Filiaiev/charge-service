@@ -37,8 +37,6 @@ public interface RateServiceMapper {
 
     ServiceChargeRate mapServiceChargeRateDOToServiceChargeRate(ServiceChargeRateDO serviceChargeRateDO);
 
-    List<ServiceChargeRate> mapServiceChargeRateDOsToServiceChargeRates(List<ServiceChargeRateDO> serviceChargeRateDOs);
-
     List<SurchargeRateDO> mapSurchargeRatesToSurchargeRateDOs(List<SurchargeRate> surchargeRates);
 
     ServiceChargeRateDO mapServiceChargeRateToServiceChargeRateDO(ServiceChargeRate serviceChargeRate);

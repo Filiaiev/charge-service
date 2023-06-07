@@ -10,6 +10,6 @@ spring:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: "jdbc:mysql://localhost:3306/rates"
         username: "root"
-        password: "SuSundron007@"
+        password: "root"
 server:
     port: 8084

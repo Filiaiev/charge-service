@@ -23,7 +23,7 @@ public class SurchargeStrategy implements ChargeStrategy {
     private final RateServiceMapper rateServiceMapper;
 
     @Override
-    public List<ItemCharge> createCharge(CreateChargeSummaryRequest request) {
+    public List<ItemCharge> createChargeSummary(CreateChargeSummaryRequest request) {
         Map<SurchargeType, SurchargeRate> rates = rateService.getLatestSurchargeRates(request.getZoneRouteId());
 
         List<ItemCharge> chargeList = new ArrayList<>();
@@ -44,6 +44,7 @@ public class SurchargeStrategy implements ChargeStrategy {
 
     private BigDecimal calculateItemTotal(CreateChargeSummaryRequestItem item, SurchargeRate rate) {
         BigDecimal itemSurcharge = rate.getRatePerKg().multiply(BigDecimal.valueOf(item.getShippingWeight()));
+        itemSurcharge = itemSurcharge.max(rate.getMinCharge());
 
         return item.getQuantity().multiply(itemSurcharge);
     }
